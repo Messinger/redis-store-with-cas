@@ -61,5 +61,20 @@ describe Redis::Store::StoreWithCas do
     end)
   end
 
+  def test_cas_multi_with_altered_key
+    @store.set('foo', 'baz')
+    assert @store.cas_multi('foo') { |_hash| { 'fu' => 'baz' } }
+    assert_nil @store.get('fu')
+    assert_equal 'baz', @store.get('foo')
+  end
+
+  def test_cas_multi_with_partial_miss
+    @store.set('foo', 'baz')
+    assert(@store.cas_multi('foo', 'bar') do |hash|
+      assert_equal({ "foo" => "baz" }, hash)
+      {}
+    end)
+    assert_equal 'baz', @store.get('foo')
+  end
 
 end

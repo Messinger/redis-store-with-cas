@@ -25,7 +25,7 @@ class Redis
             valuehash = yield values
             ires = multi do |multi|
               valuehash.map do |name,value|
-                multi.set(name,value,options)
+                multi.set(name,value,options) if values.key?(name)
               end
             end
             true
