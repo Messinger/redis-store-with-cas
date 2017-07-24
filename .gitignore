@@ -5,3 +5,5 @@ stdout
 .idea/
 .ruby-version
 .ruby-gemset
+.yardoc/
+doc
