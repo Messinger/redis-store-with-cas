@@ -3,7 +3,6 @@ require 'test_helper'
 describe Redis::Store::StoreWithCas do
   def setup
     @store  = Redis::Store::StoreWithCas.new :namespace => 'storetest'
-    @client = @store.instance_variable_get(:@client)
   end
 
   def teardown
@@ -75,6 +74,29 @@ describe Redis::Store::StoreWithCas do
       {}
     end)
     assert_equal 'baz', @store.get('foo')
+  end
+
+  def test_cas_multi_with_partial_update
+    @store.set('foo', 'bar')
+    @store.set('fud', 'biz')
+    assert(@store.cas_multi('foo', 'fud') do |hash|
+      assert_equal({ "foo" => "bar", "fud" => "biz" }, hash)
+
+      { "foo" => "baz" }
+    end)
+    assert_equal({ "foo" => "baz", "fud" => "biz" }, @store.read_multi('foo', 'fud'))
+  end
+
+  def test_cas_multi_with_partial_conflict
+    @store.set('foo', 'bar')
+    @store.set('fud', 'biz')
+    result = @store.cas_multi('foo', 'fud') do |hash|
+      assert_equal({ "foo" => "bar", "fud" => "biz" }, hash)
+      @store.set('foo', 'bad')
+      { "foo" => "baz", "fud" => "buz" }
+    end
+    assert result
+    assert_equal({ "foo" => "bad", "fud" => "buz" }, @store.read_multi('foo', 'fud'))
   end
 
 end

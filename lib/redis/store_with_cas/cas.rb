@@ -23,10 +23,13 @@ class Redis
             values = read_multi(*keys)
             options = extract_options keys
             valuehash = yield values
-            ires = multi do |multi|
-              valuehash.map do |name,value|
+            result = {}
+
+            v = valuehash.map do |name,value|
+              ires = multi do |multi|
                 multi.set(name,value,options) if values.key?(name)
               end
+              result[name] = value if return_value(ires)
             end
             true
           end
