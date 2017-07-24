@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Redis::Store::StoreWithCas do
   def setup
-    @store  = Redis::Store::StoreWithCas.new
+    @store  = Redis::Store::StoreWithCas.new :namespace => 'storetest'
     @client = @store.instance_variable_get(:@client)
   end
 
