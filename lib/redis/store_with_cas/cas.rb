@@ -16,8 +16,14 @@ class Redis
           end
         end
 
-        def cas_multi keys, ttl=nil
+        def cas_multi *keys
+          options = extract_options keys
+          return if keys.empty?
+          watch keys do
+            values = read_multi keys.merge(options)
+            valuehash = yield values
 
+          end
         end
 
         def read_multi *keys
@@ -31,6 +37,14 @@ class Redis
 
         def return_value result
           result.is_a?(Array) && result[0] == 'OK'
+        end
+
+        def extract_options array
+          if array.last.is_a?(Hash) && array.last.instance_of?(Hash)
+            array.pop
+          else
+            {}
+          end
         end
       end
 

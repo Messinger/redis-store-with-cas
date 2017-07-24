@@ -33,6 +33,10 @@ describe Redis::Store::StoreWithCas do
     assert_equal 'baz', @store.get('foo')
   end
 
+  def test_cas_multi_with_empty_set
+    refute @store.cas_multi { |_hash| flunk }
+  end
+
 
   def test_read_multi
     @store.set('k1','m1')
