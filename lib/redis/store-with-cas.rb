@@ -7,10 +7,9 @@ require 'redis/store/namespace'
 require 'redis/store_with_cas/namespace'
 
 class Redis
-  class Store < self
-    class StoreWithCas < self
-      include Cas
-    end
-  end
-end
 
+  class StoreWithCas < Store
+    include Cas
+  end
+
+end

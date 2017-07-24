@@ -4,7 +4,7 @@ require 'redis/store_with_cas/version'
 
 Gem::Specification.new do |s|
   s.name        = 'redis-store-with-cas'
-  s.version     = Redis::Store::StoreWithCas::VERSION
+  s.version     = Redis::StoreWithCas::VERSION
   s.authors     = ['Rajko Albrecht']
   s.email       = ['ral@alwins-world.de']
   s.homepage    = 'http://redis-store.org/redis-store'

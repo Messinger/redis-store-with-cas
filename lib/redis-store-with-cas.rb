@@ -4,9 +4,7 @@ require 'redis/store-with-cas'
 
 class Redis
 
-  class Store < self
-    class StoreWithCas < self
-    end
+  class StoreWithCas < Store
   end
 
 end
