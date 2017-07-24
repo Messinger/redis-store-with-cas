@@ -5,7 +5,8 @@ class Redis
       module Cas
 
         def cas key, ttl=nil
-          res = watch(key) do
+
+          watch(key) do
             value = get(key)
             break false if value.nil?
             value = yield value
@@ -14,7 +15,6 @@ class Redis
             end
             return_value ires
           end
-          res
         end
 
         def cas_multi keys, ttl=nil
