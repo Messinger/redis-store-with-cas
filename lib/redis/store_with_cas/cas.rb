@@ -4,8 +4,8 @@ class Redis
     module Cas
 
       def cas key, ttl=nil
+        return false unless exists(key)
         watch(key) do
-          break false unless exists(key)
           value = get(key)
           value = yield value
           ires = multi do |multi|
