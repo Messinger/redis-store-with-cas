@@ -5,10 +5,9 @@ class Redis
       module Cas
 
         def cas key, ttl=nil
-
           watch(key) do
+            break false unless exists(key)
             value = get(key)
-            break false if value.nil?
             value = yield value
             ires = multi do |multi|
               multi.set(key,value,{:expire_in => ttl})
