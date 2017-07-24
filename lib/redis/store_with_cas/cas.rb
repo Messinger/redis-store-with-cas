@@ -20,6 +20,13 @@ class Redis
 
         end
 
+        def read_multi *keys
+          values = mget(*keys)
+          resulthash = {}
+          keys.zip(values) { |a,b| resulthash[a.to_s] = b}
+          resulthash
+        end
+
         private
 
         def return_value result

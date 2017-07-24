@@ -33,4 +33,10 @@ describe Redis::Store::StoreWithCas do
     assert_equal 'baz', @store.get('foo')
   end
 
+
+  def test_read_multi
+    @store.set('k1','m1')
+    @store.set('k2','m2')
+    assert_equal({"k1" => "m1","k2" => "m2"},@store.read_multi("k1","k2"))
+  end
 end
