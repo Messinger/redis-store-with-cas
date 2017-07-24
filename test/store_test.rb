@@ -43,4 +43,23 @@ describe Redis::Store::StoreWithCas do
     @store.set('k2','m2')
     assert_equal({"k1" => "m1","k2" => "m2"},@store.read_multi("k1","k2"))
   end
+
+  def test_cas_multi
+    @store.set('foo', 'bar')
+    @store.set('fud', 'biz')
+    assert_equal true, (@store.cas_multi('foo', 'fud') do |hash|
+      assert_equal({ "foo" => "bar", "fud" => "biz" }, hash)
+      { "foo" => "baz", "fud" => "buz" }
+    end)
+    assert_equal({ "foo" => "baz", "fud" => "buz" }, @store.read_multi('foo', 'fud'))
+  end
+
+  def test_cas_multi_with_cache_miss
+    assert(@store.cas_multi('not_exist') do |hash|
+      assert hash.empty?
+      {}
+    end)
+  end
+
+
 end

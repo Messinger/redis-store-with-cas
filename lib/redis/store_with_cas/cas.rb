@@ -17,19 +17,28 @@ class Redis
         end
 
         def cas_multi *keys
-          options = extract_options keys
+          #options = extract_options keys
           return if keys.empty?
-          watch keys do
-            values = read_multi keys.merge(options)
+          watch(*keys) do
+            values = read_multi(*keys)
+            options = extract_options keys
             valuehash = yield values
-
+            ires = multi do |multi|
+              valuehash.map do |name,value|
+                multi.set(name,value,options)
+              end
+            end
+            true
           end
         end
 
         def read_multi *keys
-          values = mget(*keys)
+          options = extract_options keys
+          keys = keys.select {|k| exists(k)}
+          return {} if keys.empty?
+          values = mget(*(keys+[options]))
           resulthash = {}
-          keys.zip(values) { |a,b| resulthash[a.to_s] = b}
+          keys.zip(values) { |a,b| resulthash[a.to_s] = b} unless values.nil?
           resulthash
         end
 
