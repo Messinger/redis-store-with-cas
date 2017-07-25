@@ -88,9 +88,7 @@ class Redis
         keys = keys.select {|k| exists(k)}
         return {} if keys.empty?
         values = mget(*(keys+[options]))
-        resulthash = {}
-        keys.zip(values) { |a,b| resulthash[a.to_s] = b} unless values.nil?
-        resulthash
+        values.nil? ? {} : Hash[keys.zip(values)]
       end
 
       private
