@@ -1,7 +1,7 @@
 class Redis
 
   # simple enhancement of Redis::Store
-  class StoreWithCas < Store
+  class Store < self
 
     # Implements Compare-And-Swap (or as Redis says Compare-And-Save)
     # on top of Redis::Store using Redis::Store::watch. It is designated for simple values, not redis-lists/hashes etc

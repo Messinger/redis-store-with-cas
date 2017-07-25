@@ -1,13 +1,13 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path('../lib', __FILE__)
-require 'redis/store_with_cas/version'
+require 'redis/store-with-cas/version'
 
 Gem::Specification.new do |s|
   s.name        = 'redis-store-with-cas'
   s.version     = Redis::StoreWithCas::VERSION
   s.authors     = ['Rajko Albrecht']
   s.email       = ['ral@alwins-world.de']
-  s.homepage    = 'http://redis-store.org/redis-store'
+  s.homepage    = 'https://git.alwin-it.de/alwin/redis-store-with-cas'
   s.summary     = %q{Extend redis store for Ruby frameworks with cas}
   s.description = %q{Extend the redis store with CAS (compare-and-swap) functionality for better cache integrity support}
 

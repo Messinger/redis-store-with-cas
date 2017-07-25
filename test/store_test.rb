@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Redis::StoreWithCas do
   def setup
-    @store  = Redis::StoreWithCas.new :namespace => 'storetest'
+    @store  = Redis::Store.new :namespace => 'storetest'
   end
 
   def teardown
