@@ -37,7 +37,7 @@ class Redis
           ires = multi do |multi|
             multi.set(key,value,ttl.nil? ? {} : {:expire_after => ttl})
           end
-          return_value ires
+          ires.is_a?(Array) && ires[0] == 'OK'
         end
       end
 
@@ -88,15 +88,11 @@ class Redis
         options = extract_options keys
         keys = keys.select {|k| exists(k)}
         return {} if keys.empty?
-        values = mget(*(keys+[options]))
+        values = mget(*keys,options)
         values.nil? ? {} : Hash[keys.zip(values)]
       end
 
       private
-
-      def return_value result
-        result.is_a?(Array) && result[0] == 'OK'
-      end
 
       def extract_options array
         if array.last.is_a?(Hash) && array.last.instance_of?(Hash)
