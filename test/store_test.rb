@@ -68,6 +68,16 @@ describe Redis::StoreWithCas do
     assert_equal({ "foo" => "baz", "fud" => "buz" }, @store.read_multi('foo', 'fud'))
   end
 
+  def test_cas_multi_with_ttl
+    @store.set('foo', 'bar')
+    @store.set('fud', 'biz')
+    @store.cas_multi('foo','fud',{:expires_in => 3600}) do |hash|
+      { "foo" => "baz", "fud" => "buz" }
+    end
+    assert @store.ttl('foo') > 0
+    assert @store.ttl('fud') > 0
+  end
+
   def test_cas_multi_with_cache_miss
     assert(@store.cas_multi('not_exist') do |hash|
       assert hash.empty?

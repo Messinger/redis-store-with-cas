@@ -52,25 +52,26 @@ class Redis
       #     newhashedvalues
       #   end
       #
+      # @example
+      #   storewithcas.cas_multi('k1','k2', :expire_in => 1200) do |currenthash| #=> ttl for all keys swapped
+      #     {'k1' => '1', 'k2' => 2}
+      #   end
+      #
       # @yield [values] a key=>value hash with values of given keys. keys not existing are not yielded
       # @yieldparam [Array] keys the keys to change
       # @yieldreturn [Hash] key-value-pairs to change. Keys not given in parameter or not existing in redis are ignored.
       # @return [Boolean] true if tried making changes, nil when keylist empty
-      # @param keys [Array] the keys to set. Must not be nil and keys must exists in Redis
+      # @param keys [Array] the keys to set. Must not be nil and keys must exists in Redis. After keys list you may append hash with options for redis.
       def cas_multi *keys
-        #options = extract_options keys
         return if keys.empty?
+        options = extract_options keys
         watch(*keys) do
-          values = read_multi(*keys)
-          options = extract_options keys
+          values = read_multi(*keys,options)
           valuehash = yield values
-          result = {}
-
-          v = valuehash.map do |name,value|
-            ires = multi do |multi|
-              multi.set(name,value,options) if values.key?(name)
-            end
-            result[name] = value if return_value(ires)
+          valuehash.map do |name,value|
+            multi do |multi|
+              multi.set(name,value,options)
+            end if values.key?(name)
           end
           true
         end
