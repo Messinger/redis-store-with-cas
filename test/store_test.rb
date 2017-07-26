@@ -32,6 +32,21 @@ describe Redis::StoreWithCas do
     assert_equal 'baz', @store.get('foo')
   end
 
+  # TODO write a Mockup redis with support for watch
+  def test_cas_with_ttl
+    @store.set('ttlfoo','bar')
+    assert(@store.cas('ttlfoo',3600) do |value|
+      assert_equal 'bar',value
+      'ttlbar'
+    end)
+    assert_equal @store.get('ttlfoo'),'ttlbar'
+    assert @store.ttl('ttlfoo') > 0
+    assert(@store.cas('ttlfoo') do |value|
+      'bar'
+    end)
+    assert_equal -1,@store.ttl('ttlfoo')
+  end
+
   def test_cas_multi_with_empty_set
     refute @store.cas_multi { |_hash| flunk }
   end

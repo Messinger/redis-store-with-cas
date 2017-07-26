@@ -35,7 +35,7 @@ class Redis
           value = get(key)
           value = yield value
           ires = multi do |multi|
-            multi.set(key,value,{:expire_in => ttl})
+            multi.set(key,value,ttl.nil? ? {} : {:expire_after => ttl})
           end
           return_value ires
         end
