@@ -7,6 +7,23 @@ This is required for thread-safe-usage of cache systems like [Identity cache](ht
 
 The tests and workflow are build like in [Memcached store for ruby](https://github.com/Shopify/memcached_store)
 
+## Installation
+
+Add the following to your Gemfile
+
+`gem 'redis-store-with-cas`
+
+## Usage
+
+Add a 
+
+`require 'redis-store-with-cas'`
+
+line to your source before first call to `Redis::Store.new`. Now each instance of `Redis::Store` has 
+two new methods:
+
+ * `cas`
+ * `cas_multi`
 
 ## Copyright
 
