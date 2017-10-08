@@ -2,7 +2,9 @@ require 'test_helper'
 
 describe Redis::StoreWithCas do
   def setup
-    @store  = Redis::Store.new :namespace => 'storetest'
+    port = ENV['REDIS_PORT_6379_TCP_PORT']||6379
+    host = ENV['REDIS_PORT_6379_TCP_ADDR']||"localhost"
+    @store  = Redis::Store.new :host => host, :port => port, :namespace => 'storetest'
   end
 
   def teardown
