@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path('../lib', __FILE__)
-require 'redis/store-with-cas/version'
+#require 'redis/store-with-cas/version'
 
 Gem::Specification.new do |s|
   s.name        = 'redis-store-with-cas'
-  s.version     = Redis::StoreWithCas::VERSION
+  s.version     = '0.0.1'
   s.authors     = ['Rajko Albrecht']
   s.email       = ['ral@alwins-world.de']
   s.homepage    = 'https://git.alwin-it.de/alwin/redis-store-with-cas'
