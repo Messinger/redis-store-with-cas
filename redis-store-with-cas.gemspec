@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.license       = 'MIT'
 
   s.add_dependency 'redis', '>= 2.2', '< 4'
-  s.add_dependency 'redis-store', '>= 1.1.0', '< 1.4'
+  s.add_dependency 'redis-store', '>= 1.1.0', '< 2'
 
   s.add_development_dependency 'rake',     '~> 10'
   s.add_development_dependency 'bundler',  '~> 1.3'
